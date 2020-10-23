@@ -259,15 +259,15 @@ module.exports={
         })
     },
     bestProduct:(req,res)=>{
-        let sql=`select p.image,pen.namatoko as namaPenjual,p.nama as namaProduct,pen.abouttoko as Description, t.productid
+        let sql=`select p.image,pen.namatoko as namaPenjual,p.nama as namaProduct,pen.abouttoko, t.productid
         from products p
         join transaksi t
         on t.productid = p.id
         join penjual pen
         on pen.id = p.penjualid
         group by t.productid
-        order by t.productid desc
-        limit 6;`
+        order by count(*) desc
+        limit 6`
         db.query(sql,(err,best)=>{
             console.log('jalan best product')
             if(err) res.status(500).send({message:'error di bp'})
