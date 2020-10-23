@@ -211,25 +211,20 @@ module.exports={
         })  
     },
     Pendapatan:(req,res)=>{
-        let sql =`select u.id, u.username,
-        sum(t.quantity*t.hargabeli * 0.1) as PotensialPen, 
-        sum(t.quantity*t.hargabeli) as totalHarga
+        let sql =`select   
+        sum(t.quantity * hargabeli * 0.1) as potential
         from users u
         join transaksi t
-        on t.userid=u.id
-        group by u.id
-        order by PotensialPen`
+        on t.userid= u.id`
         db.query(sql,(err,potenpen)=>{
             console.log('jalan poten pen')
             if(err)res.status(500).send({message:'potenpen error'})
-            sql=`select u.id,u.username,t.status,
-            sum(t.quantity*t.hargabeli*0.1) as pendapatanSkrng
-            from users u
+            sql=`select 
+            sum(t.quantity * hargabeli * 0.1) as pendapatanNow
+            from users u 
             join transaksi t
             on t.userid = u.id
-            where t.status='Finished'
-            group by u.id
-            order by pendapatanSkrng`
+            where t.status='Finished'`
             db.query(sql,(err,penskr)=>{
                 console.log('jalan di penskr')
                 if(err) res.status(500).send({message:'penskr error'})
